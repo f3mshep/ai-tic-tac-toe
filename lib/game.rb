@@ -59,7 +59,7 @@ class Board
 
   def state_checker
 
-    if @board.none? { |e| e == "X" || e == "O"  }
+    if @board.all? { |e| e == "X" || e == "O"  }
       puts "Cat's game!"
       display_board
       exit
@@ -101,15 +101,20 @@ class Board
     if current_player == "X"
       puts "\nIt is your turn, #{current_player}"
       @input = input
+      if valid_move?
+        add_token
+      else
+        puts "Please enter a valid move"
+        play_ai
+      end
     else
-      @input = rand(1..9)
-    end
-    if valid_move?
+      @input = rand(1..9) -1
+      until valid_move?
+        @input = rand(1..9) - 1
+      end
       add_token
-    else
-      puts "Please enter a valid move"
-      play_ai
     end
+
     state_checker
     @turns += 1
     play_ai
